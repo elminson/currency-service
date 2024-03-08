@@ -2,9 +2,11 @@ use std::fs::File;
 use std::io::Write;
 use reqwest::blocking::get;
 use chrono::{Utc};
+use std::thread;
+use std::time::Duration;
 use serde_json::json;
 
-fn main() {
+fn fetch_currency_and_save() {
     // URL for fetching currency rates
     let url = "https://open.er-api.com/v6/latest/USD";
 
@@ -64,5 +66,12 @@ fn main() {
             }
         }
         Err(_) => eprintln!("Error: Unable to create file"),
+    }
+}
+
+fn main() {
+    loop {
+        fetch_currency_and_save();
+        thread::sleep(Duration::from_secs(5)); // Sleep for 5 seconds
     }
 }
